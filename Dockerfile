@@ -8,10 +8,15 @@ RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/ss
 
 
 # python install
-RUN apt-get install -y wget curl tar zip gcc make g++ python3-dev 
+RUN apt-get install -y wget curl tar zip gcc make g++ python3-dev python2.7-dev 
+RUN curl -kL https://bootstrap.pypa.io/get-pip.py | /usr/bin/python2.7
+RUN pip install ipykernel
+
 RUN curl -kL https://bootstrap.pypa.io/get-pip.py | python3
 RUN pip install jupyter ipython[notebook]
 
+RUN ipython2 kernel install --name python2
+RUN ipython3 kernel install --name python3
 
 RUN printf '#!/bin/bash \n\
 jupyter notebook --ip=0.0.0.0 > /var/log/notebook.log & \n\
