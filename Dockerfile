@@ -7,7 +7,7 @@ RUN echo 'root:root' | chpasswd
 RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 
-# python install
+# python2 + opencv install
 RUN apt-get install -y wget curl tar zip gcc make g++
 RUN apt-get install -y python2.7-dev python-numpy python-opencv libfreetype6-dev libxft-dev
 RUN curl -kL https://bootstrap.pypa.io/get-pip.py | /usr/bin/python2.7
@@ -18,9 +18,13 @@ RUN python2 -m pip install networkx
 RUN python2 -m pip install pyyaml
 RUN python2 -m pip install xlsxwriter
 RUN python2 -m pip install tornado
+# http://qiita.com/youhei_nakagawa/items/1e40417fb94d4f8ffe62
+RUN ln /dev/null /dev/raw1394
 
-
+# python3 install
 RUN apt-get install -y python3-dev
+
+# jupyter install
 RUN curl -kL https://bootstrap.pypa.io/get-pip.py | python3
 RUN pip install jupyter ipython[notebook]
 RUN python3 -m pip install ipykernel
@@ -31,6 +35,16 @@ RUN python3 -m pip install pyyaml
 RUN python3 -m pip install xlsxwriter
 RUN python3 -m pip install tornado
 
+# opencv3 install
+RUN apt-get install -y cmake libavcodec-dev libavformat-dev libswscale-dev libv4l-dev libatlas-base-dev gfortran libgtk2.0-dev
+RUN wget https://github.com/Itseez/opencv/archive/3.1.0.zip && unzip 3.1.0.zip
+WORKDIR /opencv-3.1.0/
+RUN cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D BUILD_opencv_java=OFF -D WITH_IPP=OFF -D PYTHON_EXECUTABLE=/usr/bin/python3.4 . \
+&& make -j4 \
+&& make install
+
+
+# kernel install
 RUN ipython2 kernel install --name python2
 RUN ipython3 kernel install --name python3
 
