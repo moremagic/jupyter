@@ -1,7 +1,7 @@
-FROM ubuntu:15.04
+FROM ubuntu
 MAINTAINER moremagic <itoumagic@gmail.com>
 
-RUN apt-get update && apt-get install -y openssh-server openssh-client
+RUN apt-get update && apt upgrade -y && apt-get install -y openssh-server openssh-client
 RUN mkdir /var/run/sshd
 RUN echo 'root:root' | chpasswd
 RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
@@ -9,7 +9,7 @@ RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/ss
 
 # python2 + opencv install
 RUN apt-get install -y wget curl tar zip gcc make g++
-RUN apt-get install -y python2.7-dev python-numpy python-opencv libfreetype6-dev libxft-dev
+RUN apt-get install -y python2.7-dev python-numpy python-opencv libfreetype6-dev libxft-dev libopencv-dev
 RUN curl -kL https://bootstrap.pypa.io/get-pip.py | /usr/bin/python2.7
 RUN python2 -m pip install ipykernel
 RUN python2 -m pip install pandas
@@ -18,6 +18,7 @@ RUN python2 -m pip install networkx
 RUN python2 -m pip install pyyaml
 RUN python2 -m pip install xlsxwriter
 RUN python2 -m pip install tornado
+RUN python2 -m pip install pillow
 # http://qiita.com/youhei_nakagawa/items/1e40417fb94d4f8ffe62
 RUN ln /dev/null /dev/raw1394
 
@@ -34,7 +35,7 @@ RUN python3 -m pip install networkx
 RUN python3 -m pip install pyyaml
 RUN python3 -m pip install xlsxwriter
 RUN python3 -m pip install tornado
-
+RUN python3 -m pip install pillow
 # opencv3 install
 RUN apt-get install -y cmake libavcodec-dev libavformat-dev libswscale-dev libv4l-dev libatlas-base-dev gfortran libgtk2.0-dev
 RUN wget https://github.com/Itseez/opencv/archive/3.1.0.zip && unzip 3.1.0.zip
@@ -49,7 +50,7 @@ RUN ipython2 kernel install --name python2
 RUN ipython3 kernel install --name python3
 
 RUN printf '#!/bin/bash \n\
-jupyter notebook --ip=0.0.0.0 --notebook-dir=/root > /var/log/notebook.log & \n\
+jupyter notebook --ip=0.0.0.0 --allow-root --notebook-dir=/root > /var/log/notebook.log & \n\
 /usr/sbin/sshd -D \n\
 tail -f /var/null \n\
 ' >> /etc/service.sh \
