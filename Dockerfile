@@ -9,7 +9,7 @@ RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/ss
 
 # python2 + opencv install
 RUN apt-get install -y wget curl tar zip gcc make g++
-RUN apt-get install -y python2.7-dev python-numpy python-opencv libfreetype6-dev libxft-dev libopencv-dev
+RUN apt-get install -y python2.7-dev python-numpy python-scipy python-opencv libfreetype6-dev libxft-dev libopencv-dev
 RUN curl -kL https://bootstrap.pypa.io/get-pip.py | /usr/bin/python2.7
 RUN python2 -m pip install ipykernel
 RUN python2 -m pip install pandas
@@ -20,6 +20,7 @@ RUN python2 -m pip install xlsxwriter
 RUN python2 -m pip install tornado
 RUN python2 -m pip install pillow
 RUN python2 -m pip install opencv-python
+RUN python2 -m pip install scipy
 # http://qiita.com/youhei_nakagawa/items/1e40417fb94d4f8ffe62
 RUN ln /dev/null /dev/raw1394
 
@@ -38,6 +39,7 @@ RUN python3 -m pip install xlsxwriter
 RUN python3 -m pip install tornado
 RUN python3 -m pip install pillow
 RUN python3 -m pip install opencv-python
+RUN python3 -m pip install scipy
 # opencv3 install
 RUN apt-get install -y cmake libavcodec-dev libavformat-dev libswscale-dev libv4l-dev libatlas-base-dev gfortran libgtk2.0-dev
 RUN wget https://github.com/Itseez/opencv/archive/3.4.0.zip && unzip 3.4.0.zip
